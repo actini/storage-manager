@@ -1,0 +1,9 @@
+mongodb:
+  scheme: mongodb
+  host: localhost
+  port: 27017
+  username: mdbadmin
+  password: password
+  database: admin
+  options:
+    retryWrites: true
