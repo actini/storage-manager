@@ -1,0 +1,25 @@
+language: python
+python:
+  - 3.8
+
+services:
+  - docker
+
+before_install:
+  - pip install -r app/requirements.txt
+  - python tests/test.py
+
+install:
+  - docker build -f deploy/docker/Dockerfile -t storage-manager:$TRAVIS_COMMIT app/
+  - docker run -d --rm --health-interval=3s --name storage-manager storage-manager:$TRAVIS_COMMIT
+  - sleep 10 && test $(docker inspect --format "{{ json .State.Health.Status }}" storage-manager) = '"healthy"'
+  - docker stop storage-manager
+
+script:
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  - if [ -z $TRAVIS_TAG ]; then IMAGE_TAG=$TRAVIS_COMMIT; else IMAGE_TAG=$TRAVIS_TAG; fi;
+  - docker tag storage-manager:$TRAVIS_COMMIT actini/storage-manager:$IMAGE_TAG
+  - docker push actini/storage-manager:$IMAGE_TAG
+  - docker tag storage-manager:$TRAVIS_COMMIT actini/storage-manager:latest
+  - docker push actini/storage-manager:latest
+  - docker logout

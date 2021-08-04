@@ -6,7 +6,11 @@ app = Flask(__name__)
 
 @app.route("/")
 def root():
-    return "Welcome to MongoDB Database Manager!"
+    return "Welcome to Storage Manager!"
+
+@app.route("/health")
+def health():
+    return "ok"
 
 @app.route("/databases", methods=["GET"])
 def all_databases():
