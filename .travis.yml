@@ -17,7 +17,7 @@ install:
 
 script:
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-  - if [ -z $TRAVIS_TAG ]; then IMAGE_TAG=$TRAVIS_COMMIT; else IMAGE_TAG=$TRAVIS_TAG; fi;
+  - if [ -z $TRAVIS_TAG ]; then IMAGE_TAG=${TRAVIS_COMMIT:0:8}; else IMAGE_TAG=$TRAVIS_TAG; fi;
   - docker tag storage-manager:$TRAVIS_COMMIT actini/storage-manager:$IMAGE_TAG
   - docker push actini/storage-manager:$IMAGE_TAG
   - docker tag storage-manager:$TRAVIS_COMMIT actini/storage-manager:latest
