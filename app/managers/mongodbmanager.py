@@ -44,6 +44,9 @@ class MongoDBManager():
         if type(options) == dict:
             items = []
             for key, value in options.items():
+                if type(value) is bool:
+                    value = str(value).lower()
+
                 items.append("%s=%s" % (key, value))
 
             return "&".join(items)
