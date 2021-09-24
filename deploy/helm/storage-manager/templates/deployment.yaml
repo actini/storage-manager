@@ -54,7 +54,8 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
       - name: config
-        secretName: storage-manager-config
+        secret:
+          secretName: storage-manager-config
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
